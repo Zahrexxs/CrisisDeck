@@ -23,10 +23,10 @@
                             |
            +----------------v----------------+
            |                                 |
-           |    PostgreSQL (PostGIS)         |
+           |    PostgreSQL                   |
            |   [Port 5432]                   |
            |   - Disaster Reports Data       |
-           |   - Spatial Indexing            |
+           |   - Coordinates (lat/long)      |
            |   - Authenticated Users         |
            |                                 |
            +---------------------------------+

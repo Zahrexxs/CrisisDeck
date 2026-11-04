@@ -1,28 +1,21 @@
 # Stage 1: Builder
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /usr/src/app
 
-# Copy package files
+# Copy package files (package-lock.json is committed, so `npm ci` is reproducible)
 COPY package*.json ./
 
-# Install all dependencies (production + dev)
-# We need dev dependencies if you have a build step (e.g., Babel, Typescript)
-# If not, 'npm ci --only=production' is enough in the runner stage.
-# Here we assume standard install for flexibility.
 RUN npm ci
 
 # Copy source code
 COPY . .
 
-# (Optional) Run build scripts here if needed
-# RUN npm run build
-
 # Remove devDependencies
-RUN npm prune --production
+RUN npm prune --omit=dev
 
 # Stage 2: Production Runner
-FROM node:18-alpine AS runner
+FROM node:22-alpine AS runner
 
 WORKDIR /usr/src/app
 
@@ -37,8 +30,6 @@ COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/src ./src
 COPY --from=builder /usr/src/app/public ./public
 COPY --from=builder /usr/src/app/config ./config
-# Copy views if you use server-side rendering
-COPY --from=builder /usr/src/app/views ./views
 
 # Set ownership to non-root user
 RUN chown -R appuser:appgroup /usr/src/app
@@ -48,4 +39,5 @@ USER appuser
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# Run node directly so it receives SIGTERM as PID 1 and can shut down gracefully.
+CMD ["node", "src/server.js"]
