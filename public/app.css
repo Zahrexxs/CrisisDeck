@@ -14,8 +14,23 @@ body {
     top: 10px;
     right: 10px;
     z-index: 1000;
+    min-width: 200px;
     background: white;
-    padding: 10px;
+    padding: 10px 14px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+}
+
+#info h3 {
+    margin: 0 0 8px;
+}
+
+#info p {
+    margin: 4px 0;
+}
+
+.leaflet-popup-content {
+    margin: 10px 12px;
+    line-height: 1.4;
 }

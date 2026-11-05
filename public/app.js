@@ -1,15 +1,51 @@
 (function () {
-    var map = L.map('map').setView([-6.2, 106.816666], 13);
+    var JAKARTA = [-6.2, 106.816666];
+    var map = L.map('map').setView(JAKARTA, 11);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
 
+    var reportLayer = L.layerGroup().addTo(map);
     var statusSpan = document.getElementById('status');
+    var countSpan = document.getElementById('report-count');
 
     function setStatus(text, color) {
         statusSpan.style.color = color;
         statusSpan.innerText = text;
+    }
+
+    function setReportCount(count) {
+        if (!countSpan) {
+            return;
+        }
+        countSpan.innerText = count + (count === 1 ? ' report' : ' reports');
+    }
+
+    function renderReports(reports) {
+        var located = ReportView.normalizeReports(reports);
+        reportLayer.clearLayers();
+        setReportCount(located.length);
+
+        if (located.length === 0) {
+            return;
+        }
+
+        var bounds = L.latLngBounds([]);
+        located.forEach(function (report) {
+            L.circleMarker([report.latitude, report.longitude], {
+                radius: 9,
+                color: '#c0392b',
+                weight: 2,
+                fillColor: '#e74c3c',
+                fillOpacity: 0.8,
+            })
+                .bindPopup(ReportView.popupHtml(report))
+                .addTo(reportLayer);
+            bounds.extend([report.latitude, report.longitude]);
+        });
+
+        map.fitBounds(bounds.pad(0.2), { maxZoom: 13 });
     }
 
     fetch('/api/health')
@@ -25,5 +61,18 @@
         })
         .catch(function () {
             setStatus('Backend Unreachable', 'red');
+        });
+
+    fetch('/api/reports?limit=100')
+        .then(function (res) {
+            return res.json();
+        })
+        .then(function (data) {
+            renderReports(data.reports || []);
+        })
+        .catch(function () {
+            if (countSpan) {
+                countSpan.innerText = 'Reports unavailable';
+            }
         });
 }());
