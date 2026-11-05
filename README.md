@@ -20,6 +20,7 @@ graceful shutdown and a database healthcheck built in.
 ## Contents
 
 - [Overview](#overview)
+- [Preview](#preview)
 - [Architecture](#architecture)
 - [Quick start](#quick-start)
 - [Configuration](#configuration)
@@ -43,11 +44,20 @@ docker compose up -d --build
 
 It gives you:
 
-- a Leaflet map frontend with OpenStreetMap tiles
+- a Leaflet map that plots recent reports as markers with popups
 - `GET /api/health` for load balancers and container healthchecks
+- `GET/POST /api/reports` for reading and creating reports
 - PostgreSQL persistence with a seeded `reports` table
 - Nginx in front of the app, with gzip, security headers and proxy headers
 - optional pgAdmin, enabled only when you ask for it
+
+## Preview
+
+![TDMRC dashboard with report markers](docs/screenshot.png)
+
+The dashboard loads up to 100 recent reports from `GET /api/reports` and plots
+each located report as a marker. Popups show the title, description, victim
+count and timestamp. Report fields are HTML-escaped before rendering.
 
 ## Architecture
 
@@ -199,7 +209,9 @@ src/
   server.js          Bootstrap: listen, DB check, graceful shutdown
 public/
   index.html         Dashboard shell
-  app.js, app.css    Map and health-check client
+  app.js             Map, report markers and health-check client
+  reports-view.js    XSS-safe report popup rendering
+  app.css            Layout and panel styles
 config/
   db.js              PostgreSQL pool
 test/
