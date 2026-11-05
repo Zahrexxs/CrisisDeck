@@ -6,6 +6,8 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
 
+const { createReportsRouter } = require('./reports');
+
 function createApp({ db, enableLogging = true } = {}) {
     // Resolve the pool lazily so tests can inject a stub without opening a real connection.
     const pool = db || require('../config/db').pool;
@@ -70,6 +72,8 @@ function createApp({ db, enableLogging = true } = {}) {
     });
 
     // Unknown API routes must not fall through to the SPA.
+    app.use('/api/reports', createReportsRouter(pool));
+
     app.use('/api', (req, res) => {
         res.status(404).json({ error: 'Not found' });
     });

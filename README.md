@@ -130,6 +130,56 @@ All settings come from `.env`:
 
 Database error details are logged server-side and never returned to the client.
 
+### `GET /api/reports`
+
+Returns the most recent reports, newest first.
+
+| Query | Default | Description |
+|---|---|---|
+| `limit` | `50` | Integer between 1 and 100 |
+
+```json
+{
+  "reports": [
+    {
+      "id": 1,
+      "title": "Flood in Jakarta",
+      "description": "Severe flooding in downtown area",
+      "latitude": -6.2,
+      "longitude": 106.816666,
+      "victims": 120,
+      "created_at": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "count": 1
+}
+```
+
+### `POST /api/reports`
+
+Creates a report.
+
+```json
+{
+  "title": "Flood in Jakarta",
+  "description": "Severe flooding in downtown area",
+  "latitude": -6.2,
+  "longitude": 106.816666,
+  "victims": 120
+}
+```
+
+| Field | Required | Rules |
+|---|---|---|
+| `title` | yes | string, 1–255 characters (trimmed) |
+| `description` | no | string, up to 5000 characters |
+| `latitude` | yes | number, −90 to 90 |
+| `longitude` | yes | number, −180 to 180 |
+| `victims` | no | integer, 0 to 1,000,000 (default 0) |
+
+Returns `201` with `{ "report": { ... } }`, or `400` with
+`{ "error": "Validation failed", "details": [...] }`.
+
 ## Testing
 
 ```bash
@@ -145,6 +195,7 @@ needed. CI runs the same command on every push and pull request.
 ```
 src/
   app.js             Express app factory (middleware, routes, error handling)
+  reports.js         Reports API router and validation
   server.js          Bootstrap: listen, DB check, graceful shutdown
 public/
   index.html         Dashboard shell
