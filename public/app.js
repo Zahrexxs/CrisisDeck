@@ -2,13 +2,23 @@
     var JAKARTA = [-6.2, 106.816666];
     var map = L.map('map').setView(JAKARTA, 11);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(map);
-
     var reportLayer = L.layerGroup().addTo(map);
     var statusSpan = document.getElementById('status');
     var countSpan = document.getElementById('report-count');
+
+    fetch('/api/config')
+        .then(function (res) {
+            return res.json();
+        })
+        .then(function (config) {
+            L.tileLayer(config.tileUrl, {
+                attribution: config.tileAttribution,
+                maxZoom: config.tileMaxZoom || 19,
+            }).addTo(map);
+        })
+        .catch(function () {
+            console.error('Could not load map configuration');
+        });
 
     function setStatus(text, color) {
         statusSpan.style.color = color;

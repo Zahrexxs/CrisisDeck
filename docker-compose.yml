@@ -14,6 +14,9 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+      - TILE_URL=${TILE_URL:-}
+      - TILE_ATTRIBUTION=${TILE_ATTRIBUTION:-}
+      - TILE_MAX_ZOOM=${TILE_MAX_ZOOM:-}
     depends_on:
       db:
         condition: service_healthy

@@ -7,8 +7,9 @@ const rateLimit = require('express-rate-limit');
 const path = require('path');
 
 const { createReportsRouter } = require('./reports');
+const { getTileConfig, tileCspSources } = require('./tiles');
 
-function createApp({ db, enableLogging = true } = {}) {
+function createApp({ db, enableLogging = true, tileConfig = getTileConfig() } = {}) {
     // Resolve the pool lazily so tests can inject a stub without opening a real connection.
     const pool = db || require('../config/db').pool;
 
@@ -24,13 +25,14 @@ function createApp({ db, enableLogging = true } = {}) {
                 defaultSrc: ["'self'"],
                 scriptSrc: ["'self'", 'https://unpkg.com'],
                 styleSrc: ["'self'", 'https://unpkg.com'],
-                imgSrc: ["'self'", 'data:', 'https://unpkg.com', 'https://*.tile.openstreetmap.org'],
+                imgSrc: ["'self'", 'data:', 'https://unpkg.com', ...tileCspSources(tileConfig.url)],
                 connectSrc: ["'self'"],
                 objectSrc: ["'none'"],
                 baseUri: ["'self'"],
                 frameAncestors: ["'self'"],
             },
         },
+        referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
     }));
     app.use(compression());
     app.use(cors({
@@ -69,6 +71,14 @@ function createApp({ db, enableLogging = true } = {}) {
                 error: 'Database connection failed',
             });
         }
+    });
+
+    app.get('/api/config', (req, res) => {
+        res.json({
+            tileUrl: tileConfig.url,
+            tileAttribution: tileConfig.attribution,
+            tileMaxZoom: tileConfig.maxZoom,
+        });
     });
 
     // Unknown API routes must not fall through to the SPA.

@@ -25,6 +25,7 @@ graceful shutdown and a database healthcheck built in.
 - [Architecture](#architecture)
 - [Quick start](#quick-start)
 - [Configuration](#configuration)
+- [Map tiles](#map-tiles)
 - [API](#api)
 - [Testing](#testing)
 - [Project structure](#project-structure)
@@ -118,8 +119,25 @@ All settings come from `.env`:
 | `POSTGRES_HOST` | `db` | Database host |
 | `POSTGRES_PORT` | `5432` | Database port |
 | `CORS_ORIGIN` | _disabled_ | Comma-separated list of allowed browser origins |
+| `TILE_URL` | OSM | Raster XYZ tile template (see [Map tiles](#map-tiles)) |
+| `TILE_ATTRIBUTION` | OpenStreetMap | Attribution HTML shown on the map |
+| `TILE_MAX_ZOOM` | `19` | Maximum tile zoom |
 | `PGADMIN_EMAIL` | — | pgAdmin login, only used with the `tools` profile |
 | `PGADMIN_PASSWORD` | — | pgAdmin password, only used with the `tools` profile |
+
+## Map tiles
+
+The map defaults to **OpenStreetMap** raster tiles, which need no API key. You can
+point it at any raster XYZ provider with `TILE_URL`, `TILE_ATTRIBUTION` and
+`TILE_MAX_ZOOM` in `.env`. The Content-Security-Policy is generated from `TILE_URL`,
+so the provider's host is allowed automatically.
+
+> **OpenStreetMap:** `tile.openstreetmap.org` is a volunteer service with a strict
+> usage policy. It blocks automated or high-volume clients and is not recommended
+> for production. For a real deployment, use a provider with an explicit plan
+> (MapTiler, Stadia, Thunderforest) or self-host tiles as described in
+> [ARCHITECTURE_AND_OFFLINE.md](./ARCHITECTURE_AND_OFFLINE.md). CARTO basemaps now
+> require an API key.
 
 ## API
 
