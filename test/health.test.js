@@ -47,5 +47,5 @@ test('non-API routes serve the dashboard', async () => {
     const res = await request(app).get('/');
 
     assert.equal(res.status, 200);
-    assert.match(res.text, /TDMRC/);
+    assert.match(res.text, /CrisisDeck/);
 });

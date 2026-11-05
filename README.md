@@ -1,10 +1,10 @@
 <div align="center">
 
-# TDMRC Disaster Dashboard
+# CrisisDeck
 
-**A field-ready disaster reporting dashboard — Node.js, PostgreSQL and Nginx, packaged with Compose.**
+**An offline-first disaster reporting dashboard for TDMRC — Node.js, PostgreSQL and Nginx behind Compose.**
 
-[![CI](https://github.com/Zahrexxs/tdmrc-disaster-dashboard/actions/workflows/ci.yml/badge.svg)](https://github.com/Zahrexxs/tdmrc-disaster-dashboard/actions/workflows/ci.yml)
+[![CI](https://github.com/Zahrexxs/CrisisDeck/actions/workflows/ci.yml/badge.svg)](https://github.com/Zahrexxs/CrisisDeck/actions/workflows/ci.yml)
 ![Node.js 22+](https://img.shields.io/badge/node-%E2%89%A522-339933?logo=node.js&logoColor=white)
 ![Express 5](https://img.shields.io/badge/express-5-000000?logo=express&logoColor=white)
 ![PostgreSQL 15](https://img.shields.io/badge/postgresql-15-4169E1?logo=postgresql&logoColor=white)
@@ -36,7 +36,7 @@ graceful shutdown and a database healthcheck built in.
 
 ## Overview
 
-The TDMRC Dashboard is the deployment layer for a disaster-mitigation centre. It
+The CrisisDeck is the deployment layer for a disaster-mitigation centre. It
 is designed to run on a single VPS or an offline field server and to be brought up
 with one command:
 
@@ -55,7 +55,7 @@ It gives you:
 
 ## Preview
 
-![TDMRC dashboard with report markers](docs/screenshot.png)
+![CrisisDeck dashboard with report markers](docs/screenshot.png)
 
 The dashboard loads up to 100 recent reports from `GET /api/reports` and plots
 each located report as a marker. Popups show the title, description, victim
@@ -84,8 +84,8 @@ diagram and offline map-tile strategies.
 **Requirements:** Docker + Docker Compose.
 
 ```bash
-git clone https://github.com/Zahrexxs/tdmrc-disaster-dashboard.git
-cd tdmrc-disaster-dashboard
+git clone https://github.com/Zahrexxs/CrisisDeck.git
+cd CrisisDeck
 
 cp .env.example .env
 # edit .env and set a strong POSTGRES_PASSWORD
