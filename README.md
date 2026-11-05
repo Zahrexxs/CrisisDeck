@@ -9,6 +9,7 @@
 ![Express 5](https://img.shields.io/badge/express-5-000000?logo=express&logoColor=white)
 ![PostgreSQL 15](https://img.shields.io/badge/postgresql-15-4169E1?logo=postgresql&logoColor=white)
 ![Docker Compose](https://img.shields.io/badge/docker-compose-2496ED?logo=docker&logoColor=white)
+![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 
 Serves a Leaflet map, a health API and a static dashboard, with security headers,
 graceful shutdown and a database healthcheck built in.
@@ -31,6 +32,7 @@ graceful shutdown and a database healthcheck built in.
 - [Hardening](#hardening)
 - [Troubleshooting](#troubleshooting)
 - [Further reading](#further-reading)
+- [License](#license)
 
 ## Overview
 
@@ -292,4 +294,4 @@ cat backup_file.sql | docker exec -i tdmrc_db psql -U tdmrc_user -d tdmrc_db
 
 ## License
 
-No license file is included in this repository. All rights reserved.
+[MIT](./LICENSE) © 2026 Muhammad Naufal Azzahri

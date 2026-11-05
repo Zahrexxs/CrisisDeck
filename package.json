@@ -4,6 +4,7 @@
     "description": "Siklon Tropice Senyar Disaster Mitigations Center Dashboard",
     "main": "src/server.js",
     "private": true,
+    "license": "MIT",
     "engines": {
         "node": ">=22"
     },
